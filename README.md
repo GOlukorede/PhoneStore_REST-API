@@ -44,12 +44,11 @@ Ensure the following are installed on your system:
    python -m venv .venv
 
 4. **Activate Virtual Environment**
-   On Linux or macOS:
    ```bash
+   On Linux or macOS:
    source .venv/bin/activate
 
-On Windows:
-   ```bash
+   On Windows:
     .venv\Scripts\activate
 
 5. **Install Required Dependencies**
@@ -59,13 +58,12 @@ On Windows:
 
 6. **Set Environment Variables**
    Export the required Flask environment variables:
-   On Linux/macOS:
    ```bash
+   On Linux/macOS:
    export FLASK_APP=api/
    export FLASK_DEBUG=1
 
-On Windows (Command Prompt):
-    ```bash
+    On Windows (Command Prompt):
     set FLASK_APP=api/
     set FLASK_DEBUG=1
 
