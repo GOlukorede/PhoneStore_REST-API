@@ -34,3 +34,44 @@ Ensure the following are installed on your system:
    ```bash
    git clone https://github.com/GOlukorede/PhoneStore_REST-API.git
 
+2. **Navigate to the Project Folder**
+    ```bash
+   cd PhoneStore_REST-API
+
+3. **Create a Virtual Environment**
+   Create a virtual environment to manage dependencies:
+   ```bash
+   python -m venv .venv
+
+4. **Activate Virtual Environment**
+   On Linux or macOS:
+   ```bash
+   source .venv/bin/activate
+
+   On Windows:
+   ```bash
+    .venv\Scripts\activate
+
+5. **Install Required Dependencies**
+   Install all necessary Python packages:
+   ```bash
+   pip install -r requirements.txt
+
+6. **Set Environment Variables**
+   Export the required Flask environment variables:
+   On Linux/macOS:
+   ```bash
+   export FLASK_APP=api/
+   export FLASK_DEBUG=1
+
+    On Windows (Command Prompt):
+    ```bash
+    set FLASK_APP=api/
+    set FLASK_DEBUG=1
+
+7.  **Run the Application**
+     Start the Flask development server:
+     ```bash
+     flask run 
+
+
