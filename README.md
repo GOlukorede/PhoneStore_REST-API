@@ -48,7 +48,7 @@ Ensure the following are installed on your system:
    ```bash
    source .venv/bin/activate
 
-   On Windows:
+On Windows:
    ```bash
     .venv\Scripts\activate
 
@@ -64,7 +64,7 @@ Ensure the following are installed on your system:
    export FLASK_APP=api/
    export FLASK_DEBUG=1
 
-    On Windows (Command Prompt):
+On Windows (Command Prompt):
     ```bash
     set FLASK_APP=api/
     set FLASK_DEBUG=1
