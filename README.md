@@ -72,4 +72,10 @@ Ensure the following are installed on your system:
      ```bash
      flask run 
 
+## **Author**
+- Olukorede Samson Gbenga
+
+## **Acknowledgments**
+**Special thanks to ALX for the scholarship and the excellent training offered to me.**
+
 
