@@ -11,7 +11,9 @@ import logging
 # Create a logger instance
 logger = logging.getLogger(__name__)
 
-order_namespace = Namespace('orders', description='Order related operations')
+order_namespace = Namespace('orders', description='Handles all operations related to orders, \
+    including creating orders,'
+    'retrieving order details, and managing order cancellation.')
 
 order_model = order_namespace.model('Order', {
     "user_id": fields.Integer(required=True, description='ID of the user that owns the order')
@@ -49,13 +51,26 @@ order_items_model = order_namespace.model('OrderItems', {
 @order_namespace.route('/create_order')
 class CreateOrder(Resource):
     """
-        Creates an order for a user
+        Resource for creating an order for a user.
+        This endpoint allows a user to initiate the creation of an order. The order will be associated
+        with the user identified via the JWT token. If the operation succeeds, a success message is returned.
     """
     @jwt_required()
     @order_namespace.doc(description="Create an order for a user", security='Bearer Auth')
     def post(self):
         """
-            Creates an order for a user
+        Handle POST request to create an order.
+
+        This method validates the user's identity using the JWT token, retrieves the user details from the database, 
+        and creates an order associated with the user.
+
+        Returns:
+            dict: A success message if the order is created successfully.
+            HTTP Status Code:
+                - 201: Created
+                - 401: Unauthorized if the token is invalid or missing.
+                - 404: Not Found if the user is not found in the database.
+                - 500: Internal Server Error if an unexpected error occurs.
         """
         jwt_data = get_jwt()
         user_email = jwt_data['sub']
@@ -77,13 +92,25 @@ class CreateOrder(Resource):
 @order_namespace.route('/cancel_order')
 class DeleteOrder(Resource):
     """
-        Cancels (or deletes) an order for a user
+    Resource for canceling (or deleting) an existing order for a user.
+    This endpoint allows a user to cancel an existing order. The order is identified based on the user
+    details obtained via the JWT token. Upon successful cancellation, the order is removed from the database.
     """
     @jwt_required()
     @order_namespace.doc(description="Cancel an order for a user", security='Bearer Auth')
     def delete(self):
         """
-            Cancels an order for a user
+        Handle DELETE request to cancel an order.
+        This method validates the user's identity using the JWT token, retrieves the user's associated order from the 
+        database, and deletes the order.
+
+        Returns:
+            dict: A success message if the order is canceled successfully.
+            HTTP Status Code:
+                - 200: OK if the order is deleted successfully.
+                - 401: Unauthorized if the token is invalid or missing.
+                - 404: Not Found if the user or order does not exist.
+                - 500: Internal Server Error if an unexpected error occurs.
         """
         jwt_data = get_jwt()
         user_email = jwt_data['sub']
