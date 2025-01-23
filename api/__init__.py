@@ -10,6 +10,7 @@ from .models.orders import Order
 from .models.products import Product
 from .models.users import User, Admin
 from .auth.views import auth_namespace
+from .admin.views import admin_user_namespace
 from .carts.views import cart_namespace
 from .products.views import product_namespace
 from .cartItems.views import cartItems_namespace
@@ -17,6 +18,7 @@ from .orders.views import order_namespace
 from .orderItems.views import orderItems_namespace
 from .tokenBlockList.views import logout_namespace
 from .admin.auth import admin_auth_namespace
+from .models.logout import TokenBlockList
 
 
 
@@ -56,6 +58,7 @@ def create_app(config=config_dict['dev']):
     api.add_namespace(orderItems_namespace, path='/orderItems')
     api.add_namespace(logout_namespace, path='/logout')
     api.add_namespace(admin_auth_namespace, path='/admin/auth')
+    api.add_namespace(admin_user_namespace, path='/admin')
     
     @jwt.token_in_blocklist_loader
     def token_in_blocklist_callback(jwt_header, jwt_data):

@@ -24,11 +24,11 @@ class ProdConfig(Config):
     pass
 
 class TestConfig(Config):
-    # TESTING = True
-    # SQLALCHEMY_DATABASE_URI = 'sqlite://' # use in-memory sqlite database
-    # SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # SQLALCHEMY_ECHO = True
-    pass
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://' # use in-memory sqlite database
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = True
+    
     
 config_dict = {
     'dev': DevConfig,
