@@ -98,7 +98,7 @@ Users:
 * Place an order.
 
 Admins:
-* Only admins can add and delete products
+* Only admins can add, update and delete products
 * Admins also have the right to see all carts, cancel an order when required, etc.
 
 ## **Author**
