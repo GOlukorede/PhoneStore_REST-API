@@ -41,8 +41,8 @@ def create_app(config=config_dict['dev']):
               description='A RESTful API for shopping phone brands, \
                   providing endpoints for, managing products(admin privileges), \
                       browsing products, managing carts, and processing orders.',
-              terms_url='/terms', contact='samsongreats@gmail.com', license='MIT',
-              authorizations=authorizations, security='Bearer Auth'
+              contact='samsongreats@gmail.com',
+              authorizations=authorizations, security='Bearer Auth',
               )
     
     db.init_app(app)
