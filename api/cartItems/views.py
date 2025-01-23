@@ -9,7 +9,7 @@ import logging
 # Create a logger instance
 logger = logging.getLogger(__name__)
 
-cartItems_namespace = Namespace('cartItems', description='Add products to a cart')
+cartItems_namespace = Namespace('cartItems', description='Operations for managing cart items, such as adding products to a cart.')
 
 cartItems_model = cartItems_namespace.model('CartItem', {
     "id": fields.Integer(description='The cart item unique identifier'),
@@ -26,7 +26,21 @@ class cartItemsResource(Resource):
     @cartItems_namespace.doc(description="Add a product to a cart before placing an order")
     def post(self):
         """
-            Add a product to a cart
+             Adds a product to a cart or update the quantity of an existing product in the cart.
+            This endpoint allows users to add products to their shopping cart. If the cart does not exist, 
+            it is created automatically for the authenticated user. The product's quantity is validated to 
+            ensure it is greater than zero, and the stock availability is checked. If the product is already 
+            in the cart, the quantity is updated instead of adding a duplicate entry.
+            Returns: 
+                A success message if the product is added to the cart successfully.
+            status codes:
+                201: Product added to cart successfully
+                200: Product quantity updated in cart successfully
+                400: Invalid request or missing required fields
+                401: Invalid or missing authorization token
+                404: User or product not found
+                500: An unexpected error occurred while trying to add product to cart
+            
         """
         
         jwt_data = get_jwt()
