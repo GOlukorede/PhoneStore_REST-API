@@ -81,10 +81,10 @@ Ensure the following are installed on your system:
 - Create an account
 - Login to the account (This generates the access and refresh tokens)
 - Access protected endpoints with the access token and refresh expired access tokens with refresh token
-**Admin related operations**
+### Admin related operations
 - Add, update, and delete products
 - View user details and delete users
-**User related operations**
+### User related operations
 - Create carts, add items to created carts. Update, delete and get carts.
 - Place orders, cancel orders and update orders
 
