@@ -92,6 +92,6 @@ Ensure the following are installed on your system:
 - Olukorede Samson Gbenga
 
 ## **Acknowledgments**
-**I would like to express my sincere gratitude to **ALX** for awarding me a scholarship and providing me with exceptional training and support. The resources and expertise made available to me through this program have been instrumental in helping me develop the skills and knowledge necessary to complete this API project.**
+I would like to express my sincere gratitude to **ALX** for awarding me a scholarship and providing me with exceptional training and support. The resources and expertise made available to me through this program have been instrumental in helping me develop the skills and knowledge necessary to complete this API project.
 
 
