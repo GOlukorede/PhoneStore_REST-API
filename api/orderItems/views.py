@@ -14,7 +14,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-orderItems_namespace = Namespace('orderItems', description='Order Items related operations')
+orderItems_namespace = Namespace('orderItems', description='Operations related to order items, \
+    including adding items to orders and placing orders.')
 
 orderStatus_model = orderItems_namespace.model('Order Status', {
     "order_id": fields.Integer(required=True, description='ID of the order to add the product to'),
@@ -35,7 +36,21 @@ class AddOrderItem(Resource):
     @orderItems_namespace.doc(description="Add item(s) to an order from the cart (Place an order)")
     def post(self):
         """
-            Adds item(s) to an order from the cart (Place an order)
+           Handles the process of placing an order by adding items from the user's cart to an order.
+
+        - Validates the user's authorization token and retrieves the associated user.
+        - Ensures the user's cart exists and contains items.
+        - Creates a new order if one does not exist for the user.
+        - Transfers items from the cart to the order, while updating product stock levels.
+        - Deletes the cart upon successful order placement.
+        
+        Returns:
+            Success message with the created order ID upon successful operation.
+        status codes:
+            201 - Order placed successfully.
+            401 - Invalid or missing authorization token.
+            404 - User not found, Cart not found, Cart is empty, or Product not found.
+        500 - An unexpected error occurred.         
         """
         
         jwt_data = get_jwt()
@@ -76,7 +91,8 @@ class AddOrderItem(Resource):
             except Exception as e:
                 logger.error(f"An error occurred while adding product to order: {str(e)}")
                 orderItems_namespace.abort(500, {'message': 'An unexpected error occurred while trying to add product to order'})
-                
+            
+               
                 # Update product stock
                 product = Product.query.get(item.product_id)
                 if product:
