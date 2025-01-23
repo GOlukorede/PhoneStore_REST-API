@@ -90,7 +90,7 @@ Ensure the following are installed on your system:
 
 ## STEPS:
 Users:
-**Create a account**
++ Create a account
 **Login to the account**
 **Create a cart (This requires the JWT access token)**
 **Add items to the created cart (This requires access token so that the items can be added to the intended user)**
