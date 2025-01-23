@@ -11,7 +11,13 @@ class LogoutUser(Resource):
     @logout_namespace.doc(description="Logout a user")
     def post(self):
         """
-            Logout a user
+            logs out a user by revoking the user's access token.
+            Returns:
+                - 200: Success message with the revoked token type.
+                - 400: Error message if the operation fails.  
+            HTTP status codes:
+                - 200: Token revoked successfully. User logged out.
+                - 400: Something went wrong logging out user {user_email}: {error_message}     
         """
         try:
             jwt_data = get_jwt()
