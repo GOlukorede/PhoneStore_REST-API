@@ -1,9 +1,10 @@
 from flask_restx import Resource, Namespace, fields, abort
-from flask_jwt_extended import jwt_required, get_jwt
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from ..models.products import Product
 from flask import request
 
-product_namespace = Namespace('products', description='Product related operations')
+product_namespace = Namespace('products', description='Endpoints for managing and interacting with products in the store,\
+    including creation, retrieval, updating, and deletion.')
 
 product_model = product_namespace.model('Product', {
     "id": fields.Integer(),
@@ -46,10 +47,19 @@ class CreateAndGetAllProducts(Resource):
     @jwt_required()
     def post(self):
         """
-            Create a new phone product
+            Adds a new phone product to the store
+            Only admins can add products
+            
+            Returns:
+                The created product
+                HTTP status code:
+                - 201: Created
+                - 400: Bad Request
+                - 403: Forbidden     
         """
-        jwt_data = get_jwt
-        if jwt_data.get('role') != 'admin':
+        jwt_identity = get_jwt_identity()
+        jwt_data = get_jwt()
+        if jwt_data is None or jwt_data.get('role') != 'admin':
             product_namespace.abort(403, 'Unauthorized. Only admins can add products')
         data = product_namespace.payload
         if data.get('category') not in ['iphone', 'samsung', 'huawei', 'tecno', 
@@ -87,7 +97,13 @@ class CreateAndGetAllProducts(Resource):
     @product_namespace.doc(description="Get all products in the store")
     def get(self):
         """
-            Get all products
+            Retrieve all products in the store
+            Returns:
+                A list of all products in the store
+                HTTP status code
+                 - 200: OK
+                 - 400: Bad Request
+                
         """
         page = request.args.get('page', default=1, type=int)
         if page < 1:
@@ -120,7 +136,12 @@ class GetUpdateDeleteProduct(Resource):
                            required=True)
     def get(self, id):
         """
-            Get a product by id
+            Retrieves a specific product by its ID
+            Returns:
+                The product with the specified ID
+                HTTP status code:
+                - 200: OK
+                - 404: Not Found
         """
         product = Product.query.get(id)
         if not product:
@@ -134,9 +155,18 @@ class GetUpdateDeleteProduct(Resource):
     @jwt_required()
     def put(self, id):
         """
-            Update a product by id
+            Update a product details by its ID
+            Only admins can update products
+            Returns:
+                The updated product
+                HTTP status code:
+                - 200: OK
+                - 400: Bad Request
+                - 403: Forbidden
+                - 404: Not Found
+                - 500: Internal Server Error
         """
-        jwt_data = get_jwt
+        jwt_data = get_jwt()
         if jwt_data.get('role') != 'admin':
             product_namespace.abort(403, 'Unauthorized. Only admins can update products')
         product = Product.query.get(id)
@@ -187,9 +217,16 @@ class GetUpdateDeleteProduct(Resource):
     @jwt_required()
     def delete(self, id):
         """
-            Delete a product by its id
+            Deletes a specific product by its ID
+            Only admins can delete products
+            Returns:
+                A success message upon successful deletion
+                HTTP status code:
+                - 200: OK
+                - 403: Forbidden
+                - 404: Not Found
         """
-        jwt_data = get_jwt
+        jwt_data = get_jwt()
         if jwt_data.get('role') != 'admin':
             product_namespace.abort(403, 'Unauthorized. Only admins can delete products')
         product = Product.query.get(id)
@@ -197,3 +234,6 @@ class GetUpdateDeleteProduct(Resource):
             product_namespace.abort(404, 'Product not found')
         product.delete()
         return {"message": "Product deleted successfully"}, 200
+    
+    
+    
