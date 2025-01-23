@@ -70,7 +70,12 @@ Ensure the following are installed on your system:
 7.  **Run the Application**
      Start the Flask development server:
      ```bash
-     flask run 
+     flask run
+
+## **HOW IT WORKS**
+**Admin related operations**
+- Add, update, and delete products
+- View user details and delete users
 
 ## **Author**
 - Olukorede Samson Gbenga
