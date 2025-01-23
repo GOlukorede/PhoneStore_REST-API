@@ -90,16 +90,16 @@ Ensure the following are installed on your system:
 
 ## STEPS:
 Users:
-+ Create a account
-**Login to the account**
-**Create a cart (This requires the JWT access token)**
-**Add items to the created cart (This requires access token so that the items can be added to the intended user)**
-**Create an order**
-**Place an order.**
+*  Create a account
+* Login to the account
+* Create a cart (This requires the JWT access token)
+* Add items to the created cart (This requires access token so that the items can be added to the intended user)
+* Create an order
+* Place an order.
 
 Admins:
-**Only admins can add and delete products**
-**Admins also have the right to see all carts, cancel an order when required, etc.**
+* Only admins can add and delete products
+* Admins also have the right to see all carts, cancel an order when required, etc.
 
 ## **Author**
 - Olukorede Samson Gbenga
