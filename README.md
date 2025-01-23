@@ -72,7 +72,7 @@ Ensure the following are installed on your system:
      ```bash
      flask run
 
-8. **Load the swagger API**
+8. **Load the swaggerUI API**
    Go to the browser and type:
    ```bash
    localhost:5000
@@ -80,7 +80,7 @@ Ensure the following are installed on your system:
 ## **HOW IT WORKS**
 - Create an account
 - Login to the account (This generates the access and refresh tokens)
-- Access protected endpoints with the access token and refresh expired access tokens with refresh token
+- Access protected endpoints with the access token. Refresh expired access tokens with refresh token
 ### Admin related operations
 - Add, update, and delete products
 - View user details and delete users
@@ -92,6 +92,6 @@ Ensure the following are installed on your system:
 - Olukorede Samson Gbenga
 
 ## **Acknowledgments**
-**Special thanks to ALX for the scholarship and the excellent training offered to me.**
+**I would like to express my sincere gratitude to **ALX** for awarding me a scholarship and providing me with exceptional training and support. The resources and expertise made available to me through this program have been instrumental in helping me develop the skills and knowledge necessary to complete this API project.**
 
 
