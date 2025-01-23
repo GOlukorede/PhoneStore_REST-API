@@ -10,14 +10,17 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-cart_namespace = Namespace('carts', description='Cart related operations')
+cart_namespace = Namespace('carts', description='A namespace dedicated to managing\
+    cart-related operations, including creating,\
+    deleting, and retrieving carts, as well as \
+    managing cart items for users')
 
 cart_model = cart_namespace.model('Cart',
 {
     "user_id": fields.Integer(description="The ID of the user that owns the cart", required=True)
 })
 
-cart_status_model = cart_namespace.model('Cart Status', {
+cart_status_model = cart_namespace.model('CartStatus', {
     'id': fields.Integer(),
     'user_id': fields.Integer(required=True, description='ID of the user that owns the cart'),
     'created_at': fields.DateTime(),
@@ -45,6 +48,11 @@ cart_items_model = cart_namespace.model('CartItems', {
     'pagination': fields.Nested(pagination_model)
 })
 
+cart_list_model = cart_namespace.model('CartResponse', {
+    'carts': fields.List(fields.List(fields.Nested(cart_status_model))),
+    'pagination': fields.Nested(pagination_model)
+})
+
 @cart_namespace.route('/create_cart')
 class CreateCart(Resource):
     # @cart_namespace.expect(cart_model)
@@ -53,7 +61,15 @@ class CreateCart(Resource):
     @cart_namespace.doc(description="Create a cart for a user")
     def post(self):
         """
-            Create a cart for a user
+            Endpoint to create a new cart for a user.
+            Ensures the user is authenticated and checks if a cart already exists for the user before creating a new one.
+            Returns:
+                The created cart details if successful.
+            status codes:
+                201: Cart created successfully
+                400: Cart already exists for the user
+                404: User not found
+                500: An unexpected error occurred while trying to create a cart
         """
         jwt_data = get_jwt()
         user_email = jwt_data['sub']
@@ -79,7 +95,15 @@ class DeleteCart(Resource):
     @cart_namespace.doc(description="Delete a cart for a user with all its items")
     def delete(self):
         """
-            Delete a cart for a user
+           Endpoint to delete a user's cart along with all its associated items. 
+           Validates user authentication and cart ownership.
+              Returns:
+                A success message if the cart is deleted successfully.
+                status codes:
+                200: Cart deleted successfully
+                401: Invalid or missing authorization token
+                404: User not found
+                500: An unexpected error occurred while trying to delete cart
         """
         jwt_data = get_jwt()
         user_email = jwt_data['sub']
@@ -105,7 +129,15 @@ class GetAllCartItems(Resource):
     @cart_namespace.doc(description="Retrieve all items in a user's cart")
     def get(self):
         """
-            Get all items in a cart for a user
+            Retrieves all items within a user's cart, with support for pagination. 
+            Ensures secure access through user authentication and provides navigational details for paginated data.
+            Returns:
+                All items in the user's cart with pagination details.
+            status codes:
+                200: Cart items retrieved successfully
+                401: Invalid or missing authorization token
+                404: User or cart not found
+                500: An unexpected error occurred while trying to retrieve all items in the cart
         """
         jwt_data = get_jwt()
         user_email = jwt_data['sub']
@@ -142,12 +174,21 @@ class GetAllCartItems(Resource):
 
 @cart_namespace.route('/cart/all')
 class GetAllCarts(Resource):
-    @cart_namespace.marshal_with(cart_status_model)
+    #@cart_namespace.marshal_with(cart_status_model)
+    @cart_namespace.marshal_with(cart_list_model)
     @jwt_required()
     @cart_namespace.doc(description="Retrieve all carts for all users")
     def get(self):
         """
-            Get all carts for all users
+           Fetches all carts in the system with support for pagination. 
+           Provides details about each cart and paginates the response for efficient data consumption.
+              Returns:
+                All carts in the system with pagination details.
+              status codes:
+                200: Carts retrieved successfully
+                401: Invalid or missing authorization token
+                404: No carts found
+                500: An unexpected error occurred while trying to retrieve all carts
         """
         
         try:
@@ -162,18 +203,20 @@ class GetAllCarts(Resource):
                 cart_namespace.abort(400, "Page number out of range")
             if per_page > 50:
                 cart_namespace.abort(400, "Per page limit exceeded")
-            return {"carts": carts.items, 
-                "pagination": {
-                "page": carts.page,
-                "per_page": carts.per_page,
-                "total": carts.total,
-                "pages": carts.pages,
-                "next_page": carts.next_num,
-                "prev_page": carts.prev_num
-            }}, 200
+            return {"carts": carts.items,
+                    "pagination": {
+                        "page": carts.page,
+                        "per_page": carts.per_page,
+                        "total": carts.total,
+                        "pages": carts.pages,
+                        "next_page": carts.next_num,
+                        "prev_page": carts.prev_num
+                    }
+            }, 200
+            
         except Exception as e:
             logger.error(f"An error occurred while trying to retrieve all carts for all users: {str(e)}")
-            cart_namespace.abort(500, "An unexpected error occurred while trying to retrieve all carts")
+            cart_namespace.abort(500, "An unexpected error occurred while trying to retrieve all carts") 
         
         
 @cart_namespace.route('/cart/delete/<int:id>')
@@ -184,7 +227,15 @@ class DeleteItem(Resource):
                         required=True)
     def delete(self, id):
         """
-            Delete a cart item in a user's cart by id of the cart item
+            Deletes a specific cart item by its ID, ensuring it belongs to the authenticated user's cart. 
+            Validates ownership of the cart item and ensures secure access through user authentication.
+            Returns:
+                A success message if the cart item is deleted successfully.
+            status codes:
+                200: Cart item deleted successfully
+                401: Invalid or missing authorization token
+                404: User or cart item not found
+                500: An unexpected error occurred while trying to delete the cart item
         """
         jwt_data = get_jwt()
         user_email = jwt_data['sub']
