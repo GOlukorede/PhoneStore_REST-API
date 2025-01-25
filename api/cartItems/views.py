@@ -13,7 +13,7 @@ cartItems_namespace = Namespace('cartItems', description='Operations for managin
 
 cartItems_model = cartItems_namespace.model('CartItem', {
     "id": fields.Integer(description='The cart item unique identifier'),
-    "cart_id": fields.Integer(description='ID of the cart to add the product to'),
+    # "cart_id": fields.Integer(description='ID of the cart to add the product to'),
     # "price": fields.Float(description='Price of the product'),
     "product_id": fields.Integer(required=True, description='ID of the product to add to the cart'),
     "quantity": fields.Integer(required=True, description='Quantity of the product to add to the cart')
@@ -90,8 +90,10 @@ class cartItemsResource(Resource):
             # Update the existing item's quantity
             existing_item.quantity += quantity
             existing_item.price = existing_item.quantity * product.price
+            product.stock -= existing_item.quantity
             try:
                 existing_item.save()
+                product.save()
                 return {'message': 'Product quantity updated in cart'}, 200
             except Exception as e:
                 logger.error(f"An error occurred while trying update product quantity : {str(e)}")
@@ -99,8 +101,10 @@ class cartItemsResource(Resource):
         else:
             # Create a new cart item
             item = CartItem(cart_id=cart_id, product_id=product_id, quantity=quantity, price=price)
+            product.stock -= item.quantity
             try:
                 item.save()
+                product.save()
                 return {'message': 'Product added to cart'}, 201
             except Exception as e:
                 logger.error(f"An error occurred while trying to add product to cart: {str(e)}")
